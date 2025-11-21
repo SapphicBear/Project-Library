@@ -1,0 +1,46 @@
+:root {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+button,
+ul,
+li,
+div,
+main,
+header {
+    padding: 0;
+    margin: 0;
+}
+
+ul,
+li,
+a {
+    text-decoration: none;
+    list-style: none;
+}
+
+body {
+    background: rgb(197, 116, 129);
+}
+
+header {
+    display: grid;
+}
+header h1 {
+    place-self: center;
+}
+
+
+/* Inserted with Javascript */
+.book-card {
+    width: clamp(100px, 25%, 45%);
+    background: white;
+}
