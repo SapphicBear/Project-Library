@@ -17,16 +17,46 @@ const Book = function(title, author, genre) {
     this.title = title;
     this.author = author;
     this.genre = genre;
-
 }
+
+Book.prototype.read = false;
+Book.prototype.remove = false;
+
 Book.prototype.getID = function() {
     this.id = crypto.randomUUID();
 }
 
+Book.prototype.bookRead = function() {
+    this.read = true;
+}
 
-
+Book.prototype.bookRemove = function() {
+    this.remove = true;
+}
+// Populate array with books
 function addBookToLibrary(title, author, genre) {
+    if (title === undefined || author === undefined || genre === undefined) {
+        throw new Error("Please enter all information, 'title', 'author' and 'genre'!");
+    };
     const book = new Book(title, author, genre);
     book.getID();
     myLibrary.push(book);
+}
+
+// When "read" button pressed, marks book as read:
+function markBookAsRead(book) {
+    book.bookRead();
+    return book.read;
+}
+
+
+// when remove book is clicked, run these two functions.
+function markBookToRemove(book) {
+    book.bookRemove();
+    return book.remove;
+}
+// Find books marked for removal and remove from array!
+function removeBook(array) {
+    let index = array.findIndex(item => item.remove === true);
+    return array.splice(index, 1);
 }
