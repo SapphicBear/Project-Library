@@ -6,6 +6,27 @@
 // Add a 'remove' button to remove a book from the array and the DOM
 // Add a button that marks the book as 'read'.
 const bookshelf = document.querySelector(".bookshelf");
-const bookCard = document.createElement("div").classList = "book-card";
 
 const myLibrary = [];
+
+// Constructor
+const Book = function(title, author, genre) {
+    if (!new.target) {
+        throw Error("You must use the 'new' operator to call the constructor!");
+    }
+    this.title = title;
+    this.author = author;
+    this.genre = genre;
+
+}
+Book.prototype.getID = function() {
+    this.id = crypto.randomUUID();
+}
+
+
+
+function addBookToLibrary(title, author, genre) {
+    const book = new Book(title, author, genre);
+    book.getID();
+    myLibrary.push(book);
+}
