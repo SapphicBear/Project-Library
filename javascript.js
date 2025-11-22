@@ -6,35 +6,13 @@
 // Add a 'remove' button to remove a book from the array and the DOM
 // Add a button that marks the book as 'read'.
 const bookshelf = document.querySelector(".bookshelf");
+const dialog = document.querySelector("dialog");
+const showButton = document.querySelector("dialog + button");
+const addButton = document.querySelector("dialog button.add-book");
+const closeButton = document.querySelector("dialog button");
 
 const myLibrary = [];
 
-// DOM Constants:
-const book = document.createElement("div");
-book.classList.add("book-card");
-book.textContent = "Book 1";
-const title = document.createElement("p");
-title.className = "title";
-const author = document.createElement("p");
-author.className = "author";
-const genre = document.createElement("p");
-genre.className = "genre";
-const readButton = document.createElement("button");
-readButton.className = "read-button";
-readButton.textContent = "Read?";
-const removeButton = document.createElement("button");
-removeButton.className = "remove-button";
-removeButton.textContent = "Remove book";
-bookshelf.appendChild(book);
-book.appendChild(title);
-book.appendChild(author);
-book.appendChild(genre);
-
-const buttonArea = document.createElement("div");
-buttonArea.className = "button-area";
-book.appendChild(buttonArea);
-buttonArea.appendChild(readButton);
-buttonArea.appendChild(removeButton);
 
 // Constructor
 const Book = function(title, author, genre) {
@@ -70,12 +48,14 @@ Book.prototype.bookRemove = function() {
 }
 // Populate array with books
 function addBookToLibrary(title, author, genre) {
-    if (title === undefined || author === undefined || genre === undefined) {
-        throw new Error("Please enter all information, 'title', 'author' and 'genre'!");
-    };
-    const book = new Book(title, author, genre);
-    book.getID();
-    myLibrary.push(book);
+    if (title === "" || author === "" || genre === "") {
+        alert("Please enter all information, 'title', 'author' and 'genre'!");
+        throw new Error("Error!");
+    } else {
+        const book = new Book(title, author, genre);
+        book.getID();
+        myLibrary.push(book);
+    }
 }
 
 
@@ -83,12 +63,96 @@ function addBookToLibrary(title, author, genre) {
 function removeBook(array) {
     let index = array.findIndex(item => item.remove === true);
     return array.splice(index, 1);
+    
 }
 
+// Read through library and draw each item
+function drawBooks(library) {
+    library.forEach((item) => {
+        const book = document.createElement("div");
+        book.classList.add("book-card");
+        const title = document.createElement("p");
+        title.className = "title";
+        const author = document.createElement("p");
+        author.className = "author";
+        const genre = document.createElement("p");
+        genre.className = "genre";
+        const readButton = document.createElement("button");
+        readButton.className = "read-button";
+        readButton.textContent = "Read?";
+        const removeButton = document.createElement("button");
+        removeButton.className = "remove-button";
+        removeButton.textContent = "Remove book";
+        const buttonArea = document.createElement("div");
+        buttonArea.className = "button-area";
+        bookshelf.appendChild(book);
+        book.appendChild(title);
+        book.appendChild(author);
+        book.appendChild(genre);
+        book.appendChild(buttonArea);
+        buttonArea.appendChild(readButton);
+        buttonArea.appendChild(removeButton);
+
+        readButton.addEventListener("click", () => {
+            item.bookRead();
+            if (book.className === "book-card read") {
+                book.classList.remove("read");
+                title.classList.remove("read");
+                author.classList.remove("read");
+                genre.classList.remove("read");
+            } else {
+                book.classList.add("read");
+                title.classList.add("read");
+                author.classList.add("read");
+                genre.classList.add("read");
+            }
+        });
+
+        removeButton.addEventListener("click", () => {
+            item.bookRemove();
+            removeBook(myLibrary);
+            book.remove();
+        })
+
+        title.textContent = item.title;
+        author.textContent = item.author;
+        genre.textContent = item.genre;
+    });
+}
+
+// eventListeners 
+
+showButton.addEventListener("click", () => {
+    dialog.showModal();
+});
+addButton.addEventListener("click", () => {
+    const bookTitle = document.querySelector("#title");
+    const bookAuthor = document.querySelector("#author");
+    const bookGenre = document.querySelector("#genre");
+    if (bookTitle.value === "" || bookAuthor.value === "" || bookGenre.value === "") {
+        alert("Please enter all information, 'title', 'author' and 'genre'!");
+        throw new Error("Error!");
+    }
+    const book = document.querySelectorAll(".book-card");
+    if (book) {
+        book.forEach((item) => {
+            item.remove();
+        });
+    };
+    addBookToLibrary(bookTitle.value, bookAuthor.value, bookGenre.value);
+    
+    drawBooks(myLibrary);
+    bookTitle.value = "";
+    bookAuthor.value = "";
+    bookGenre.value = "";
+    dialog.close();
+});
+
+closeButton.addEventListener("click", () => {
+    dialog.close();
+});
 // Initial book-cards for visualization
 
 addBookToLibrary("Manufacturing Consent", "Edward S. Herman & Noam Chomsky", "Political Essay");
-
-title.textContent = myLibrary[0].title;
-author.textContent = myLibrary[0].author;
-genre.textContent = myLibrary[0].genre;
+addBookToLibrary("Sacred and Terrible Air", "Robert Kurvitz", "Crime, fantasy");
+drawBooks(myLibrary);

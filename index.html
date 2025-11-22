@@ -10,6 +10,27 @@
 <body>
     <header>
         <h1>The Library!</h1>
+        <div class="add-area">
+            <dialog >
+                <div class="add-new-book-area">
+                <p>Add your own book! Please provide a title, author and genre of the book you wish to add!</p>
+                <form class="add-new-book">
+                    <label for="title">Please enter a title </label>
+                    <input type="text" name="title" id="title" placeholder="book title" autofocus>
+                    <label for="author">Please enter the author(s) name(s):</label>
+                    <input type="text" name="author" id="author" placeholder="author's name">
+                    <label for="genre">Please enter a genre</label>
+                    <input type="text" name="genre" id="genre" placeholder="genre">
+                </form>
+                <div class="button-area add">
+                <button class="cancel" autofocus formmethod="dialog">Cancel</button>
+                <button class="add-book" formmethod="dialog">Add Book</button>
+                </div>
+                </div>
+            </dialog>
+            <button class="add-button">Add a Book</button>
+            
+        </div>
     </header>
 
     <main>
