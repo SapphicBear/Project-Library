@@ -9,6 +9,33 @@ const bookshelf = document.querySelector(".bookshelf");
 
 const myLibrary = [];
 
+// DOM Constants:
+const book = document.createElement("div");
+book.classList.add("book-card");
+book.textContent = "Book 1";
+const title = document.createElement("p");
+title.className = "title";
+const author = document.createElement("p");
+author.className = "author";
+const genre = document.createElement("p");
+genre.className = "genre";
+const readButton = document.createElement("button");
+readButton.className = "read-button";
+readButton.textContent = "Read?";
+const removeButton = document.createElement("button");
+removeButton.className = "remove-button";
+removeButton.textContent = "Remove book";
+bookshelf.appendChild(book);
+book.appendChild(title);
+book.appendChild(author);
+book.appendChild(genre);
+
+const buttonArea = document.createElement("div");
+buttonArea.className = "button-area";
+book.appendChild(buttonArea);
+buttonArea.appendChild(readButton);
+buttonArea.appendChild(removeButton);
+
 // Constructor
 const Book = function(title, author, genre) {
     if (!new.target) {
@@ -27,11 +54,19 @@ Book.prototype.getID = function() {
 }
 
 Book.prototype.bookRead = function() {
-    this.read = true;
+    if (this.read === true) {
+        this.read = false;
+    } else {
+        this.read = true;
+    }
 }
 
 Book.prototype.bookRemove = function() {
-    this.remove = true;
+    if (this.remove === true) {
+        this.remove = false;
+    } else {
+        this.remove = true;
+    }
 }
 // Populate array with books
 function addBookToLibrary(title, author, genre) {
@@ -43,20 +78,17 @@ function addBookToLibrary(title, author, genre) {
     myLibrary.push(book);
 }
 
-// When "read" button pressed, marks book as read:
-function markBookAsRead(book) {
-    book.bookRead();
-    return book.read;
-}
 
-
-// when remove book is clicked, run these two functions.
-function markBookToRemove(book) {
-    book.bookRemove();
-    return book.remove;
-}
 // Find books marked for removal and remove from array!
 function removeBook(array) {
     let index = array.findIndex(item => item.remove === true);
     return array.splice(index, 1);
 }
+
+// Initial book-cards for visualization
+
+addBookToLibrary("Manufacturing Consent", "Edward S. Herman & Noam Chomsky", "Political Essay");
+
+title.textContent = myLibrary[0].title;
+author.textContent = myLibrary[0].author;
+genre.textContent = myLibrary[0].genre;
