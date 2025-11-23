@@ -78,7 +78,7 @@ dialog {
     border: 8px var(--green) solid;
     border-radius: 18px;
     background: var(--light-green);
-    width: 30%;
+    width: 60vw;
 }
 
 .add-new-book {
@@ -174,6 +174,28 @@ label {
     top: 1rem;
     left: 0.1rem;
     transform: rotate(-45deg);
+}
+.title::before {
+    content: "Title";
+    top: 10px;
+}
+.author::before {
+    content: "Author";
+    top: 112px;
+
+}
+.genre::before {
+    content: "Genre";
+    top: 220px;
+}
+
+.title::before,
+.author::before,
+.genre::before {
+    display: inline-block;
+    position: absolute;
+    left: 9rem;
+    color:#0b240081
 }
 
 p {
