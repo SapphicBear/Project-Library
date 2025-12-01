@@ -26,70 +26,89 @@ class Book {
         return crypto.randomUUID();
     }
 
-    markBookRead() {
+    markBookRead(DOM) {
         if (this.read == true) {
             this.read = false;
+            DOM.bookTitle.classList.toggle("read");
+            DOM.bookAuthor.classList.toggle("read");
+            DOM.bookGenre.classList.toggle("read");
+            DOM.madeBook.classList.toggle("read");
         } else {
             this.read = true;
+            DOM.bookTitle.classList.toggle("read");
+            DOM.bookAuthor.classList.toggle("read");
+            DOM.bookGenre.classList.toggle("read");
+            DOM.madeBook.classList.toggle("read");
         }
+
     }
 
-    markBookDelete() {
-        this.delete = true;
+    drawBook(DOM) {
+        const book = document.createElement("div");
+        book.classList.add("book-card");
+        const title = document.createElement("p");
+        title.classList.add("title");
+        const author = document.createElement("p");
+        author.classList.add("author");
+        const genre = document.createElement("p");
+        genre.classList.add("genre");
+        const readButton = document.createElement("button");
+        readButton.classList.add("read-button");
+        readButton.textContent = "Read?";
+        const removeButton = document.createElement("button");
+        removeButton.className = "remove-button";
+        removeButton.textContent = "Remove book";
+        const buttonArea = document.createElement("div");
+        buttonArea.className = "button-area";
+        DOM.bookshelf.appendChild(book);
+        book.appendChild(title);
+        book.appendChild(author);
+        book.appendChild(genre);
+        book.appendChild(buttonArea);
+        buttonArea.appendChild(readButton);
+        buttonArea.appendChild(removeButton);
+
+        DOM.madeBook = document.querySelector(".book-card");
+        DOM.bookTitle = document.querySelector(".title");
+        DOM.bookAuthor = document.querySelector(".author");
+        DOM.bookGenre = document.querySelector(".genre");
+
+        readButton.addEventListener("click", () => {
+            this.markBookRead(DOM);
+            console.log(this.read);
+        });
+        removeButton.addEventListener("click", () => {
+            this.delete = true;
+            this.removeBook(myLibrary);
+            book.remove();
+            console.log(myLibrary);
+            
+        });
+
+        title.textContent = this.title;
+        author.textContent = this.author;
+        genre.textContent = this.genre;
     }
+
+    removeBook(array) {
+            let index = array.findIndex(item => item.delete === true);
+            return array.splice(index, 1);
+    }
+
 }
 
 const handlers = {
-    addBookToLibrary(title, author, genre) {
+    addBookToLibrary(title, author, genre, DOM) {
         if (title === "" || author === "" || genre === "") {
         alert("Please enter all information, 'title', 'author' and 'genre'!");
         throw new Error("Error!");
         } else {
         const book = new Book(title, author, genre);
         myLibrary.push(book);
+        book.drawBook(DOM);
         console.log(myLibrary);
     }
     },
-    removeBook(array) {
-        let index = array.findIndex(item => item.remove === true);
-        return array.splice(index, 1);
-    },
-    drawBooks(DOM, library) {
-        library.forEach((item) => {
-            const book = document.createElement("div");
-            book.classList.add("book-card");
-            const title = document.createElement("p");
-            title.className = "title";
-            const author = document.createElement("p");
-            author.className = "author";
-            const genre = document.createElement("p");
-            genre.className = "genre";
-            const readButton = document.createElement("button");
-            readButton.className = "read-button";
-            readButton.textContent = "Read?";
-            const removeButton = document.createElement("button");
-            removeButton.className = "remove-button";
-            removeButton.textContent = "Remove book";
-            const buttonArea = document.createElement("div");
-            buttonArea.className = "button-area";
-            DOM.bookshelf.appendChild(book);
-            book.appendChild(title);
-            book.appendChild(author);
-            book.appendChild(genre);
-            book.appendChild(buttonArea);
-            buttonArea.appendChild(readButton);
-            buttonArea.appendChild(removeButton);
-            DOM.book = document.querySelector(".book-card");
-            DOM.bookTitle = document.querySelector(".title");
-            DOM.bookAuthor = document.querySelector(".author");
-            DOM.bookGenre = document.querySelector(".genre");
-            DOM.readButton = document.querySelectorAll(".read-button");
-            DOM.removeButton = document.querySelectorAll(".remove-button");
-        title.textContent = item.title;
-        author.textContent = item.author;
-        genre.textContent = item.genre;
-    });
-}
 }
 
 const listeners = {
@@ -103,14 +122,16 @@ const listeners = {
             if (DOM.title.value === "" || DOM.author.value === "" || DOM.genre.value === "") {
                 throw new Error(alert("Please enter all information, 'title', 'author' and 'genre'!"));
             }
-            const madeBooks = document.querySelectorAll(".book-card");
-            if (madeBooks) {
-                madeBooks.forEach((book) => {
-                    book.remove();
-                });
+            let foundBooks = document.querySelectorAll(".book-card");
+            if (foundBooks) {
+                foundBooks.forEach((item) => {
+                    item.remove();
+                })
+                myLibrary.forEach((book) => {
+                    book.drawBook(DOM);
+                })
             }
-            handler.addBookToLibrary(DOM.title.value, DOM.author.value, DOM.genre.value);
-            handler.drawBooks(DOM, myLibrary);
+            handler.addBookToLibrary(DOM.title.value, DOM.author.value, DOM.genre.value, DOM);
             DOM.dialog.close();
             DOM.title.value = "";
             DOM.author.value = "";
@@ -122,51 +143,18 @@ const listeners = {
             DOM.dialog.close();
         });
     },
-    readButton(DOM) {
-        if (DOM.readButton) {
-            DOM.readButton.forEach((button) => {
-                button.addEventListener("click", () => {
-                    
-                    DOM.book.classList.toggle("read");
-                    DOM.book.classList.toggle("read");
-                    DOM.bookTitle.classList.toggle("read");
-                    DOM.bookAuthor.classList.toggle("read");
-                    DOM.bookGenre.classList.toggle("read");
-        });
-            })
-        } else {
-            console.log("No Books yet!");
-        }
         
-    },
-    removeButton(DOM, handler) {
-        if (DOM.removeButton) {
-            DOM.removeButton.forEach((button) => {
-                button.addEventListener("click", () => {
-                    Book.markBookDelete();
-                    handler.removeBook(myLibrary);
-                    DOM.book.remove();
-                })
-            });
-        } else {
-            console.log("No books yet!");
-        }
-        
-    },
 }
 const DOM = cacheDom();
 const myLibrary = [];
-handlers.addBookToLibrary("Manufacturing Consent", "Edward S. Herman & Noam Chomsky", "Political Essay");
-handlers.addBookToLibrary("Sacred and Terrible Air", "Robert Kurvitz", "Crime, fantasy");
-handlers.drawBooks(DOM, myLibrary);
-console.log(myLibrary.Book.title);
+handlers.addBookToLibrary("Manufacturing Consent", "Edward S. Herman & Noam Chomsky", "Political Essay", DOM);
+handlers.addBookToLibrary("Sacred and Terrible Air", "Robert Kurvitz", "Crime, fantasy", DOM);
+console.log(myLibrary);
 
 
 listeners.showDialog(DOM);
 listeners.addButton(DOM, handlers);
 listeners.closeButton(DOM);
-listeners.readButton(DOM);
-listeners.removeButton(DOM, handlers)
 
 })();
 
