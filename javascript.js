@@ -76,7 +76,7 @@ class Book {
             this.delete = true;
             this.removeBook(myLibrary);
             book.remove();
-            console.log(myLibrary);
+            
             
         });
 
