@@ -26,19 +26,11 @@ class Book {
         return crypto.randomUUID();
     }
 
-    markBookRead(DOM) {
+    markBookRead() {
         if (this.read == true) {
             this.read = false;
-            DOM.bookTitle.classList.toggle("read");
-            DOM.bookAuthor.classList.toggle("read");
-            DOM.bookGenre.classList.toggle("read");
-            DOM.madeBook.classList.toggle("read");
         } else {
             this.read = true;
-            DOM.bookTitle.classList.toggle("read");
-            DOM.bookAuthor.classList.toggle("read");
-            DOM.bookGenre.classList.toggle("read");
-            DOM.madeBook.classList.toggle("read");
         }
 
     }
@@ -75,7 +67,10 @@ class Book {
 
         readButton.addEventListener("click", () => {
             this.markBookRead(DOM);
-            console.log(this.read);
+            title.classList.toggle("read");
+            author.classList.toggle("read");
+            genre.classList.toggle("read");
+            book.classList.toggle("read");
         });
         removeButton.addEventListener("click", () => {
             this.delete = true;
