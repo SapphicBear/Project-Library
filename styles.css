@@ -147,7 +147,8 @@ label {
 }
 
 /* Inserted with Javascript */
-.book-card {
+.book-card,
+.default-card {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -161,7 +162,10 @@ label {
     padding: 1rem;
     box-shadow: var(--shadow);
 }
-
+.book-card,
+.book-card.read {
+    transition: background 200ms ease-out;
+}
 .book-card.read {
     background: var(--gold);
 }
@@ -229,4 +233,19 @@ button  {
     border-style: none;
     font-weight: 700;
     box-shadow: var(--shadow);
+}
+
+.default-card {
+    opacity: 0.6;
+    transition: opacity 200ms;
+}
+.default-card:hover {
+    opacity: 0.8;
+    transition: opacity 200ms;
+}
+
+.default-para {
+    flex: 1;
+    position: relative;
+    padding: 2em;
 }
