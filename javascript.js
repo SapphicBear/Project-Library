@@ -12,7 +12,31 @@
         DOM.genre = document.querySelector("#genre");
         return DOM;
     }
-class Book {
+
+    class DefaultCard {
+
+        constructor(DOM) {
+            this.DOM = DOM;
+            this.div = document.createElement("div");
+            this.para = document.createElement("p");
+        }
+
+        drawDefault() {
+            this.div.className = "default-card";
+            this.para.className = "default-para";
+            let message = ["Click the add button above to add a book to your personal library!", "Why don't ya give it a try? Add a book to your library with the add button above!", "Add a book to view it in your library!"];
+            let random = Math.floor(Math.random() * message.length);
+            this.DOM.bookshelf.appendChild(this.div);
+            this.div.appendChild(this.para);
+            this.para.textContent = message[random];
+    }
+
+        deleteDefault() {
+            this.div.remove();
+        }
+    }
+
+    class Book {
     constructor(title, author, genre) {
         this.title = title;
         this.author = author;
@@ -76,7 +100,7 @@ class Book {
             this.delete = true;
             this.removeBook(myLibrary);
             book.remove();
-            
+            handlers.reloadLibrary(DOM);
             
         });
 
@@ -104,6 +128,30 @@ const handlers = {
         console.log(myLibrary);
     }
     },
+    card: ""
+    ,
+
+    isEmpty(DOM) {
+        this.card = new DefaultCard(DOM);
+        this.card.drawDefault();
+    },
+
+    isNotEmpty() {
+        if (document.querySelector(".book-card")) {
+            this.card.deleteDefault();
+        } else {
+            return;
+        }
+    },
+
+    reloadLibrary(DOM) {
+        if (!document.querySelector(".book-card"))
+        {
+            this.isEmpty(DOM); 
+        } else {
+            this.isNotEmpty();
+        }
+    }
 }
 
 const listeners = {
@@ -131,6 +179,7 @@ const listeners = {
             DOM.title.value = "";
             DOM.author.value = "";
             DOM.genre.value = "";
+            handler.reloadLibrary(DOM);
         });
     },
     closeButton(DOM) {
@@ -142,9 +191,9 @@ const listeners = {
 }
 const DOM = cacheDom();
 const myLibrary = [];
-handlers.addBookToLibrary("Manufacturing Consent", "Edward S. Herman & Noam Chomsky", "Political Essay", DOM);
-handlers.addBookToLibrary("Sacred and Terrible Air", "Robert Kurvitz", "Crime, fantasy", DOM);
-console.log(myLibrary);
+handlers.reloadLibrary(DOM)
+// handlers.addBookToLibrary("Manufacturing Consent", "Edward S. Herman & Noam Chomsky", "Political Essay", DOM);
+// handlers.addBookToLibrary("Sacred and Terrible Air", "Robert Kurvitz", "Crime, fantasy", DOM);
 
 
 listeners.showDialog(DOM);
@@ -152,10 +201,3 @@ listeners.addButton(DOM, handlers);
 listeners.closeButton(DOM);
 
 })();
-
-
-// Initial book-cards for visualization
-
-// addBookToLibrary("Manufacturing Consent", "Edward S. Herman & Noam Chomsky", "Political Essay");
-// addBookToLibrary("Sacred and Terrible Air", "Robert Kurvitz", "Crime, fantasy");
-// drawBooks(myLibrary);
