@@ -14,21 +14,30 @@
             <dialog>
                 <div class="add-new-book-area">
                 <p>Add your own book! Please provide a title, author and genre of the book you wish to add!</p>
-                <form class="add-new-book">
+                <form class="add-new-book" novalidate>
+                    <div class="input-row">
                     <label for="title">Please enter a title </label>
-                    <input type="text" name="title" id="title" placeholder="book title" autofocus>
+                    <input type="text" name="title" id="title" placeholder="book title" autofocus required data-error="Please enter a title.">
+                    <div class="error-message" aria-live="polite"></div>
+                    </div>
+                    <div class="input-row">
                     <label for="author">Please enter the author(s) name(s):</label>
-                    <input type="text" name="author" id="author" placeholder="author's name">
+                    <input type="text" name="author" id="author" placeholder="author's name" required data-error="Please enter an author name.">
+                    <div class="error-message" aria-live="polite"></div>
+                    </div>
+                    <div class="input-row">
                     <label for="genre">Please enter a genre</label>
-                    <input type="text" name="genre" id="genre" placeholder="genre">
-                </form>
-                <div class="button-area add">
-                <button class="cancel" autofocus formmethod="dialog">Cancel</button>
-                <button class="add-book" formmethod="dialog">Add Book</button>
+                    <input type="text" name="genre" id="genre" placeholder="genre" required data-error="Please enter a genre.">
+                    <div class="error-message" aria-live="polite"></div>
+                    </div>
+                    <div class="button-area add">
+                    <button class="cancel" formmethod="dialog">Cancel</button>
+                    <button class="add-book" type="submit">Add Book</button>
                 </div>
+                </form>
                 </div>
             </dialog>
-            <button class="add-button">Add a Book</button>
+            <button class="add-button" type="button">Add a Book</button>
             
         </div>
     </header>

@@ -81,6 +81,26 @@ dialog {
     width: 60vw;
 }
 
+form > .input-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+        > .error-message {
+            color: var(--red);
+            text-shadow: white -1px -1px 2px;
+            font-size: 14px;
+                &:empty {
+                    display: none;
+                }
+        }
+}
+
+input:user-invalid {
+    outline-color: var(--red);
+    border: var(--red) 2px solid;
+}
 .add-new-book {
     display: flex;
     gap: 0.5rem;

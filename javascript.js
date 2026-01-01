@@ -4,12 +4,14 @@
         let DOM = [];
         DOM.bookshelf = document.querySelector(".bookshelf");
         DOM.dialog = document.querySelector("dialog");
+        DOM.form = document.querySelector("form");
         DOM.showButton = document.querySelector("button.add-button");
         DOM.addButton = document.querySelector("dialog button.add-book");
         DOM.closeButton = document.querySelector("dialog button");
-        DOM.title = document.querySelector("#title");
-        DOM.author = document.querySelector("#author");
-        DOM.genre = document.querySelector("#genre");
+        DOM.title = document.getElementById("title");
+        DOM.author = document.getElementById("author");
+        DOM.genre = document.getElementById("genre");
+        DOM.error = document.querySelectorAll(".error");
         return DOM;
     }
 
@@ -116,11 +118,54 @@
 
 }
 
+const validationFunctions = {
+    submitValidation() {
+        this.checkInput();
+        DOM.form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            let fields = DOM.form.querySelectorAll("input");
+            let isValid = true;
+            fields.forEach((item) => {
+                const fieldValid = this.validateField(item);
+                if (!fieldValid) {
+                    isValid = false;
+                }
+            });
+            if (isValid) {
+                console.log("good!");
+                listeners.addButton(DOM, handlers)
+            } else {
+                DOM.form.querySelector(":invalid").focus();
+            }
+        });
+    },
+    
+     validateField(field) {
+        const error = field.parentElement.querySelector(".error-message")
+        if (!field.validity.valid) {
+            
+            error.textContent = field.dataset.error;
+            return false;
+        } else {
+            error.textContent = "";
+            return true;
+        }
+    },
+    checkInput() {
+        DOM.form.querySelectorAll("input").forEach(input => {
+            input.addEventListener("blur", () => {
+                this.validateField(input);
+            })
+        })
+    }
+}
+
+
 const handlers = {
     addBookToLibrary(title, author, genre, DOM) {
         if (title === "" || author === "" || genre === "") {
-        alert("Please enter all information, 'title', 'author' and 'genre'!");
-        throw new Error("Error!");
+        // alert("Please enter all information, 'title', 'author' and 'genre'!");
+        // throw new Error("Error!");
         } else {
         const book = new Book(title, author, genre);
         myLibrary.push(book);
@@ -158,13 +203,11 @@ const listeners = {
     showDialog(DOM) {
         DOM.showButton.addEventListener("click", function () {
             DOM.dialog.showModal();
+            
         });
     },
     addButton(DOM, handler) {
-        DOM.addButton.addEventListener("click", () => {
-            if (DOM.title.value === "" || DOM.author.value === "" || DOM.genre.value === "") {
-                throw new Error(alert("Please enter all information, 'title', 'author' and 'genre'!"));
-            }
+        
             let foundBooks = document.querySelectorAll(".book-card");
             if (foundBooks) {
                 foundBooks.forEach((item) => {
@@ -176,11 +219,8 @@ const listeners = {
             }
             handler.addBookToLibrary(DOM.title.value, DOM.author.value, DOM.genre.value, DOM);
             DOM.dialog.close();
-            DOM.title.value = "";
-            DOM.author.value = "";
-            DOM.genre.value = "";
+            DOM.form.reset();
             handler.reloadLibrary(DOM);
-        });
     },
     closeButton(DOM) {
         DOM.closeButton.addEventListener("click", () => {
@@ -194,10 +234,8 @@ const myLibrary = [];
 handlers.reloadLibrary(DOM)
 // handlers.addBookToLibrary("Manufacturing Consent", "Edward S. Herman & Noam Chomsky", "Political Essay", DOM);
 // handlers.addBookToLibrary("Sacred and Terrible Air", "Robert Kurvitz", "Crime, fantasy", DOM);
-
-
 listeners.showDialog(DOM);
-listeners.addButton(DOM, handlers);
+// listeners.addButton(DOM, handlers);
+validationFunctions.submitValidation();
 listeners.closeButton(DOM);
-
 })();
